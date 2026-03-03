@@ -82,7 +82,8 @@ pub fn embed_glyphs<'a>(
         }
     }
 
-    let fallback_fonts = get_fallback_fonts(compiler_config);
+    //let fallback_fonts = get_fallback_fonts(compiler_config);
+    let fallback_fonts = []; // Removed fallback fonts to reduce binary size
 
     let mut custom_fonts: HashMap<std::path::PathBuf, fontique::QueryFont> = Default::default();
     let mut font_paths: HashMap<fontique::FamilyId, std::path::PathBuf> = Default::default();
