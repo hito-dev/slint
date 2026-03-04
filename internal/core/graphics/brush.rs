@@ -395,12 +395,7 @@ impl ConicGradientBrush {
                 #[cfg(feature = "std")]
                 let rotated_position = (stop.position + normalized_from_angle).rem_euclid(1.0);
                 #[cfg(not(feature = "std"))]
-                {
-                    // let rotated_position = (stop.position + normalized_from_angle).rem_euclid(&f1_0);
-                    // Fixed for embedded build
-                    let val = stop.position + normalized_from_angle;
-                    let rotated_position = val - val.floor();
-                }
+                let rotated_position = (stop.position + normalized_from_angle).fract();
                 GradientStop { position: rotated_position, color: stop.color }
             })
             .collect();
