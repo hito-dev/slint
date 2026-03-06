@@ -461,14 +461,6 @@ fn generate_sdf_for_glyph(
     let target_pixel_size = target_pixel_size as f64;
     let scale = target_pixel_size / metrics.units_per_em as f64;
 
-    let Some(mut shape) = fdsm_ttf_parser::load_shape_from_face(&face, glyph_id) else {
-        // For example, for space or emojis (which we don't handle as bitmap glyphs yet)
-        return Some(BitmapGlyph {
-            x_advance: (face.glyph_hor_advance(glyph_id).unwrap_or(0) as f64 * scale * 64.) as i16,
-            ..Default::default()
-        });
-    };
-
     // TODO: handle bitmap glyphs (emojis)
     let Some(bbox) = face.glyph_bounding_box(glyph_id) else {
         // For example, for space
@@ -477,6 +469,8 @@ fn generate_sdf_for_glyph(
             ..Default::default()
         });
     };
+
+    let mut shape = fdsm_ttf_parser::load_shape_from_face(&face, glyph_id)?;
 
     let width = ((bbox.x_max as f64 - bbox.x_min as f64) * scale + 2.).ceil() as u32;
     let height = ((bbox.y_max as f64 - bbox.y_min as f64) * scale + 2.).ceil() as u32;
